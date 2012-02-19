@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2011-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,23 +26,8 @@ import griffon.plugins.datasource.DataSourceConnector
  * @author Andres Almiray
  */
 @Singleton
-final class ActivejdbcConnector {
+final class ActivejdbcConnector implements ActivejdbcProvider {
     private bootstrap
-
-    static void enhance(MetaClass mc) {
-        mc.withActivejdbc = {Closure closure ->
-            ActivejdbcHolder.instance.withActivejdbc('default', closure)
-        }
-        mc.withActivejdbc << {String dataSourceName, Closure closure ->
-            ActivejdbcHolder.instance.withActivejdbc(dataSourceName, closure)
-        }
-        mc.withActivejdbc << {CallableWithArgs callable ->
-            ActivejdbcHolder.instance.withActivejdbc('default', callable)
-        }
-        mc.withActivejdbc << {String dataSourceName, CallableWithArgs callable ->
-            ActivejdbcHolder.instance.withActivejdbc(dataSourceName, callable)
-        }
-    }
 
     Object withActivejdbc(String dataSourceName = 'default', Closure closure) {
         return ActivejdbcHolder.instance.withActivejdbc(dataSourceName, closure)

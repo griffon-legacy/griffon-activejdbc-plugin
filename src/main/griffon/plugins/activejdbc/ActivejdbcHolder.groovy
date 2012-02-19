@@ -16,7 +16,7 @@
 
 package griffon.plugins.activejdbc
 
-import activejdbc.Base
+import org.javalite.activejdbc.Base
 import griffon.plugins.datasource.DataSourceHolder
 import griffon.util.CallableWithArgs
 
@@ -24,7 +24,7 @@ import griffon.util.CallableWithArgs
  * @author Andres Almiray
  */
 @Singleton
-class ActivejdbcHolder {
+class ActivejdbcHolder implements ActivejdbcProvider {
     Object withActivejdbc(String dataSourceName = 'default', Closure closure) {
         try {
             Base.open(DataSourceHolder.instance.getDataSource(dataSourceName))

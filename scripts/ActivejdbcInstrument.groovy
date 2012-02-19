@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2011-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,13 @@
  * @author Andres Almiray
  */ 
  
-import activejdbc.instrumentation.Instrumentation
-
-includeTargets << griffonScript("Init")
+import org.javalite.instrumentation.Instrumentation
 
 target(activejdbcInstrument: "Instrument source code with Activejdbc") {
     Instrumentation instrumentation = new Instrumentation()
-    instrumentation.outputDirectory = classesDirPath
-    addUrlIfNotPresent rootLoader, classesDirPath
-    addUrlIfNotPresent Instrumentation.class.classLoader, classesDirPath
+    instrumentation.outputDirectory = projectMainClassesDir
+    addUrlIfNotPresent rootLoader, projectMainClassesDir
+    addUrlIfNotPresent Instrumentation.class.classLoader, projectMainClassesDir
     instrumentation.instrument()
 }
 

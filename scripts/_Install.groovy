@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2011-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,7 @@
  * @author Andres Almiray
  */
 
-includeTargets << griffonScript("_GriffonInit")
 includeTargets << griffonScript("_GriffonCreateArtifacts")
- 
-// check to see if we already have a ActivejdbcGriffonAddon
-configText = '''root.'ActivejdbcGriffonAddon'.addon=true'''
-if(!(builderConfigFile.text.contains(configText))) {
-    println 'Adding ActivejdbcGriffonAddon to Builder.groovy'
-    builderConfigFile.text += '\n' + configText + '\n'
-}
 
 argsMap = argsMap ?: [:]
 argsMap.skipPackagePrompt = true
