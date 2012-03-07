@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import griffon.core.GriffonClass
 import griffon.core.GriffonApplication
 import griffon.plugins.activejdbc.ActivejdbcConnector
 import griffon.plugins.activejdbc.ActivejdbcEnhancer
@@ -26,15 +27,18 @@ class ActivejdbcGriffonAddon {
         ActivejdbcConnector.instance.connect(app)
     }
 
+    void addonPostInit(GriffonApplication app) {
+        def types = app.config.griffon?.activejdbc?.injectInto ?: ['controller']
+        for(String type : types) {
+            for(GriffonClass gc : app.artifactManager.getClassesOfType(type)) {
+                ActivejdbcEnhancer.enhance(gc.metaClass)
+            }
+        }
+    }
+
     def events = [
         ShutdownStart: { app ->
             ActivejdbcConnector.instance.disconnect(app)
-        },
-        NewInstance: { klass, type, instance ->
-            def types = app.config.griffon?.activejdbc?.injectInto ?: ['controller']
-            if(!types.contains(type)) return
-            def mc = app.artifactManager.findGriffonClass(klass).metaClass
-            ActivejdbcEnhancer.enhance(mc)
         }
     ]
 }

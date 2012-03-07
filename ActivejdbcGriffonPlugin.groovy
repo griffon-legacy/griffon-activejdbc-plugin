@@ -98,21 +98,7 @@ The following events will be triggered by this addon
  * ActivejdbcDisconnectStart[dataSourceName, dataSource] - triggered before disconnecting from the database
  * ActivejdbcDisconnectEnd[dataSourceName, dataSource] - triggered after disconnecting from the database
 
-### Multiple Stores
-
-The config file `ActivejdbcConfig.groovy` defines a default database block. As the name
-implies this is the database used by default, however you can configure named databases
-by adding a new config block. For example connecting to a database whose name is 'internal'
-can be done in this way
-
-	databases {
-	    internal {
-		    host = 'server.acme.com'
-		}
-	}
-
-This block can be used inside the `environments()` block in the same way as the
-default database block is used.
+This plugin relies on the facilities exposed by the [datasource][2] plugin.
 
 ### Example
 

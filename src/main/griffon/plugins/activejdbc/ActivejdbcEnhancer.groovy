@@ -16,14 +16,19 @@
 package griffon.plugins.activejdbc
 
 import griffon.util.CallableWithArgs
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * @author Andres Almiray
  */
 final class ActivejdbcEnhancer {
+    private static final Logger LOG = LoggerFactory.getLogger(ActivejdbcEnhancer)
+
     private ActivejdbcEnhancer() {}
     
     static void enhance(MetaClass mc, ActivejdbcProvider provider = ActivejdbcHolder.instance) {
+        if(LOG.debugEnabled) LOG.debug("Enhancing $mc with $provider")
         mc.withActivejdbc = {Closure closure ->
             provider.withActivejdbc('default', closure)
         }
