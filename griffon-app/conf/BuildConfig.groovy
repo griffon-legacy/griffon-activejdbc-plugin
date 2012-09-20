@@ -9,14 +9,17 @@ griffon.project.dependency.resolution = {
         mavenRepo 'http://ipsolutionsdev.com/snapshots/'
     }
     
-    def activejdbcVersion = '1.2-SNAPSHOT'
+    def activejdbcVersion = '1.4.3'
     
     dependencies {
         compile("org.javalite:activejdbc:$activejdbcVersion") {
             excludes 'junit', 'servlet-api', 'slf4j-api', 'jcl-over-slf4j', 'slf4j-simple'
         }
+        compile("org.javalite:javalite-common:$activejdbcVersion") {
+            excludes 'jaxen', 'junit'
+        }
         build("org.javalite:javalite-common:$activejdbcVersion") {
-            excludes 'jaxen'
+            excludes 'jaxen', 'junit'
         }
         build("org.javalite:activejdbc-instrumentation:$activejdbcVersion")
     }

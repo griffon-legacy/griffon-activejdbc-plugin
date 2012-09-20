@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package griffon.plugins.activejdbc
 
 import griffon.util.CallableWithArgs
@@ -26,7 +27,7 @@ final class ActivejdbcEnhancer {
     private static final Logger LOG = LoggerFactory.getLogger(ActivejdbcEnhancer)
 
     private ActivejdbcEnhancer() {}
-    
+
     static void enhance(MetaClass mc, ActivejdbcProvider provider = ActivejdbcHolder.instance) {
         if(LOG.debugEnabled) LOG.debug("Enhancing $mc with $provider")
         mc.withActivejdbc = {Closure closure ->

@@ -41,7 +41,7 @@ final class ActivejdbcConnector implements ActivejdbcProvider {
 
     void connect(GriffonApplication app, String dataSourceName = 'default') {
         DataSource dataSource = null
-        if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) {       
+        if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) {
             ConfigObject config = DataSourceConnector.instance.createConfig(app)
             dataSource = DataSourceConnector.instance.connect(app, config, dataSourceName)
         } else {

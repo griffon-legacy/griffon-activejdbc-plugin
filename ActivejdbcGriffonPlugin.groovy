@@ -18,11 +18,11 @@
  */
 class ActivejdbcGriffonPlugin {
     // the plugin version
-    String version = '0.4'
+    String version = '0.5'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '0.9.5 > *'
+    String griffonVersion = '1.1.0 > *'
     // the other plugins this plugin depends on
-    Map dependsOn = [datasource: '0.3']
+    Map dependsOn = [datasource: '0.4']
     // resources that are included in plugin packaging
     List pluginIncludes = []
     // the plugin license
@@ -63,19 +63,20 @@ giving you access to a `org.javalite.activejdbc.Base` object, with which you'll 
 to make calls to the database. Remember to make all database calls off the EDT
 otherwise your application may appear unresponsive when doing long computations
 inside the EDT.
+
 This method is aware of multiple databases. If no dataSourceName is specified when calling
 it then the default database will be selected. Here are two example usages, the first
 queries against the default database while the second queries a database whose name has
 been configured as 'internal'
 
-	package sample
-	class SampleController {
-	    def queryAllDatabases = {
-	        withActivejdbc { dataSourceName -> ... }
-	        withActivejdbc('internal') { dataSourceName -> ... }
-	    }
-	}
-	
+    package sample
+    class SampleController {
+        def queryAllDatabases = {
+            withActivejdbc { dataSourceName -> ... }
+            withActivejdbc('internal') { dataSourceName -> ... }
+        }
+    }
+
 This method is also accessible to any component through the singleton `griffon.plugins.activejdbc.ActivejdbcConnector`.
 You can inject these methods to non-artifacts via metaclasses. Simply grab hold of a particular metaclass and call
 `ActivejdbcEnhancer.enhance(metaClassInstance, activejdbcProviderInstance)`.
@@ -109,9 +110,9 @@ Scripts
 
  * **activejdbc-instrument** - collects information of model classes and enhances their bytecode with ActiveJdbc specific calls.
 
-This script must be called explicitly before running the application **at least once**. If any of the model classes is updated
-then you must clean your sources and call this script again.
-	
+This script must be called explicitly before running the application **at least once**. If any of the model classes are updated
+then you must clean compiled sources and call this script again.
+
 **Don't forget to instrument the code, otherwise the model classes will not be picked up by ActiveJdbc.**
 
 Testing
@@ -132,9 +133,9 @@ fails regardless of the arguments it receives
 
     class MyActivejdbcProvider implements ActivejdbcProvider {
         Object withActivejdbc(String dataSourceName = 'default', Closure closure) { null }
-        public <T> T withActivejdbc(String dataSourceName = 'default', CallableWithArgs<T> callable) { null }      
+        public <T> T withActivejdbc(String dataSourceName = 'default', CallableWithArgs<T> callable) { null }
     }
-    
+
 This implementation may be used in the following way
 
     class MyServiceTests extends GriffonUnitTestCase {

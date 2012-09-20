@@ -36,7 +36,7 @@ class ActivejdbcGriffonAddon {
         }
     }
 
-    def events = [
+    Map events = [
         ShutdownStart: { app ->
             ActivejdbcConnector.instance.disconnect(app)
         }
