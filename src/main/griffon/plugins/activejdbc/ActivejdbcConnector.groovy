@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2011-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package griffon.plugins.activejdbc
 
 import javax.sql.DataSource
 
 import griffon.core.GriffonApplication
-import griffon.util.CallableWithArgs
 import griffon.plugins.datasource.DataSourceHolder
 import griffon.plugins.datasource.DataSourceConnector
 
@@ -26,43 +26,40 @@ import griffon.plugins.datasource.DataSourceConnector
  * @author Andres Almiray
  */
 @Singleton
-final class ActivejdbcConnector implements ActivejdbcProvider {
+final class ActivejdbcConnector {
+    private static final String DEFAULT = 'default'
     private bootstrap
 
-    Object withActivejdbc(String dataSourceName = 'default', Closure closure) {
-        return ActivejdbcHolder.instance.withActivejdbc(dataSourceName, closure)
-    }
-
-    public <T> T withActivejdbc(String dataSourceName = 'default', CallableWithArgs<T> callable) {
-        return ActivejdbcHolder.instance.withActivejdbc(dataSourceName, callable)
-    }
-
-    // ======================================================
-
-    void connect(GriffonApplication app, String dataSourceName = 'default') {
-        DataSource dataSource = null
-        if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) {
-            ConfigObject config = DataSourceConnector.instance.createConfig(app)
-            dataSource = DataSourceConnector.instance.connect(app, config, dataSourceName)
-        } else {
-            dataSource = DataSourceHolder.instance.getDataSource(dataSourceName)
-        }
+    void connect(GriffonApplication app, String dataSourceName = DEFAULT) {
+        DataSource dataSource = DataSourceHolder.instance.fetchDataSource(dataSourceName)
 
         app.event('ActivejdbcConnectStart', [dataSourceName, dataSource])
         bootstrap = app.class.classLoader.loadClass('BootstrapActivejdbc').newInstance()
         bootstrap.metaClass.app = app
-        ActivejdbcHolder.instance.withActivejdbc(dataSourceName) { dsName -> bootstrap.init(dsName) }
+        resolveActivejdbcProvider(app).withActivejdbc(dataSourceName) { dsName -> bootstrap.init(dsName) }
         app.event('ActivejdbcConnectEnd', [dataSourceName, dataSource])
     }
 
-    void disconnect(GriffonApplication app, String dataSourceName = 'default') {
-        if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) return
-        
+    void disconnect(GriffonApplication app, String dataSourceName = DEFAULT) {
+        if (!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) return
+
         DataSource dataSource = DataSourceHolder.instance.getDataSource(dataSourceName)
         app.event('ActivejdbcDisconnectStart', [dataSourceName, dataSource])
-        ActivejdbcHolder.instance.withActivejdbc(dataSourceName) { dsName -> bootstrap.destroy(dsName) }
+        resolveActivejdbcProvider(app).withActivejdbc(dataSourceName) { dsName -> bootstrap.destroy(dsName) }
         app.event('ActivejdbcDisconnectEnd', [dataSourceName, dataSource])
         ConfigObject config = DataSourceConnector.instance.createConfig(app)
         DataSourceConnector.instance.disconnect(app, config, dataSourceName)
+    }
+
+    ActivejdbcProvider resolveActivejdbcProvider(GriffonApplication app) {
+        def activejdbcProvider = app.config.activejdbcProvider
+        if (activejdbcProvider instanceof Class) {
+            activejdbcProvider = activejdbcProvider.newInstance()
+            app.config.activejdbcProvider = activejdbcProvider
+        } else if (!activejdbcProvider) {
+            activejdbcProvider = DefaultActivejdbcProvider.instance
+            app.config.activejdbcProvider = activejdbcProvider
+        }
+        activejdbcProvider
     }
 }

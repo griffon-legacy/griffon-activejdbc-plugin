@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package griffon.plugins.activejdbc;
-
-import griffon.util.CallableWithArgs;
-import groovy.lang.Closure;
+package dsld
 
 /**
  * @author Andres Almiray
  */
-public interface ActivejdbcProvider {
-    <R> R withActivejdbc(Closure<R> closure);
 
-    <R> R withActivejdbc(String dataSourceName, Closure<R> closure);
-
-    <R> R withActivejdbc(CallableWithArgs<R> callable);
-
-    <R> R withActivejdbc(String dataSourceName, CallableWithArgs<R> callable);
+contribute(enclosingClass(annotatedBy('griffon.plugins.activejdbc.ActivejdbcAware'))) {
+    provider = "Activejdbc DSL"
+    delegatesTo "griffon.plugins.activejdbc.ActivejdbcContributionHandler"
 }

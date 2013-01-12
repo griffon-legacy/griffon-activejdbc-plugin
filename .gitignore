@@ -1,3 +1,6 @@
 target
 release_notes.md
-release_notes.md
+.idea
+activejdbc-griffonPluginFixes.iml
+activejdbc-griffonPlugins.iml
+activejdbc.iml

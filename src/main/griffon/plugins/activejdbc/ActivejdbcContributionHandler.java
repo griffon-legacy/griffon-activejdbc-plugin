@@ -22,7 +22,11 @@ import groovy.lang.Closure;
 /**
  * @author Andres Almiray
  */
-public interface ActivejdbcProvider {
+public interface ActivejdbcContributionHandler {
+    void setActivejdbcProvider(ActivejdbcProvider provider);
+
+    ActivejdbcProvider getActivejdbcProvider();
+
     <R> R withActivejdbc(Closure<R> closure);
 
     <R> R withActivejdbc(String dataSourceName, Closure<R> closure);

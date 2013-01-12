@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2011-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import griffon.core.GriffonClass
 import griffon.core.GriffonApplication
 import griffon.plugins.activejdbc.ActivejdbcConnector
 import griffon.plugins.activejdbc.ActivejdbcEnhancer
+import griffon.plugins.activejdbc.ActivejdbcContributionHandler
 
 /**
  * @author Andres Almiray
@@ -31,6 +32,7 @@ class ActivejdbcGriffonAddon {
         def types = app.config.griffon?.activejdbc?.injectInto ?: ['controller']
         for(String type : types) {
             for(GriffonClass gc : app.artifactManager.getClassesOfType(type)) {
+                if (ActivejdbcContributionHandler.isAssignableFrom(gc.clazz)) continue
                 ActivejdbcEnhancer.enhance(gc.metaClass)
             }
         }

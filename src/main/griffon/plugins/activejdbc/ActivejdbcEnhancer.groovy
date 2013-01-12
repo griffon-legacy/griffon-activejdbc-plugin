@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2012-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,20 +24,21 @@ import org.slf4j.LoggerFactory
  * @author Andres Almiray
  */
 final class ActivejdbcEnhancer {
+    private static final String DEFAULT = 'default'
     private static final Logger LOG = LoggerFactory.getLogger(ActivejdbcEnhancer)
 
     private ActivejdbcEnhancer() {}
-
-    static void enhance(MetaClass mc, ActivejdbcProvider provider = ActivejdbcHolder.instance) {
+    
+    static void enhance(MetaClass mc, ActivejdbcProvider provider = DefaultActivejdbcProvider.instance) {
         if(LOG.debugEnabled) LOG.debug("Enhancing $mc with $provider")
         mc.withActivejdbc = {Closure closure ->
-            provider.withActivejdbc('default', closure)
+            provider.withActivejdbc(DEFAULT, closure)
         }
         mc.withActivejdbc << {String dataSourceName, Closure closure ->
             provider.withActivejdbc(dataSourceName, closure)
         }
         mc.withActivejdbc << {CallableWithArgs callable ->
-            provider.withActivejdbc('default', callable)
+            provider.withActivejdbc(DEFAULT, callable)
         }
         mc.withActivejdbc << {String dataSourceName, CallableWithArgs callable ->
             provider.withActivejdbc(dataSourceName, callable)

@@ -5,13 +5,13 @@ griffon.project.dependency.resolution = {
     repositories {
         griffonHome()
         mavenCentral()
+        mavenLocal()
         mavenRepo 'https://oss.sonatype.org/content/repositories/snapshots/'
         mavenRepo 'http://ipsolutionsdev.com/snapshots/'
     }
-    
-    def activejdbcVersion = '1.4.3'
-    
+
     dependencies {
+        String activejdbcVersion = '1.4.6'
         compile("org.javalite:activejdbc:$activejdbcVersion") {
             excludes 'junit', 'servlet-api', 'slf4j-api', 'jcl-over-slf4j', 'slf4j-simple'
         }
@@ -22,14 +22,27 @@ griffon.project.dependency.resolution = {
             excludes 'jaxen', 'junit'
         }
         build("org.javalite:activejdbc-instrumentation:$activejdbcVersion")
-    }
-}
-
-griffon {
-    doc {
-        logo = '<a href="http://griffon.codehaus.org" target="_blank"><img alt="The Griffon Framework" src="../img/griffon.png" border="0"/></a>'
-        sponsorLogo = "<br/>"
-        footer = "<br/><br/>Made with Griffon (@griffon.version@)"
+        build('org.eclipse.jdt:org.eclipse.jdt.core:3.6.0.v_A58') {
+            export = false
+        }
+        String lombokIdea = '0.5'
+        build("de.plushnikov.lombok-intellij-plugin:processor-api:$lombokIdea",
+              "de.plushnikov.lombok-intellij-plugin:processor-core:$lombokIdea",
+              "de.plushnikov.lombok-intellij-plugin:intellij-facade-factory:$lombokIdea",
+              "de.plushnikov.lombok-intellij-plugin:intellij-facade-api:$lombokIdea",
+              "de.plushnikov.lombok-intellij-plugin:intellij-facade-9:$lombokIdea",
+              "de.plushnikov.lombok-intellij-plugin:intellij-facade-10:$lombokIdea",
+              "de.plushnikov.lombok-intellij-plugin:intellij-facade-11:$lombokIdea") {
+            export = false
+            transitive = false
+        }
+        String ideaVersion = '11.1.4'
+        build("org.jetbrains.idea:idea-openapi:$ideaVersion",
+              "org.jetbrains.idea:extensions:$ideaVersion",
+              "org.jetbrains.idea:util:$ideaVersion",
+              "org.jetbrains.idea:annotations:$ideaVersion") {
+            export = false
+        }
     }
 }
 

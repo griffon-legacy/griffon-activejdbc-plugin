@@ -16,18 +16,17 @@
 
 package griffon.plugins.activejdbc;
 
-import griffon.util.CallableWithArgs;
-import groovy.lang.Closure;
-
 /**
  * @author Andres Almiray
  */
-public interface ActivejdbcProvider {
-    <R> R withActivejdbc(Closure<R> closure);
+public class DefaultActivejdbcProvider extends AbstractActivejdbcProvider {
+    private static final DefaultActivejdbcProvider INSTANCE;
 
-    <R> R withActivejdbc(String dataSourceName, Closure<R> closure);
+    static {
+        INSTANCE = new DefaultActivejdbcProvider();
+    }
 
-    <R> R withActivejdbc(CallableWithArgs<R> callable);
-
-    <R> R withActivejdbc(String dataSourceName, CallableWithArgs<R> callable);
+    public static DefaultActivejdbcProvider getInstance() {
+        return INSTANCE;
+    }
 }
