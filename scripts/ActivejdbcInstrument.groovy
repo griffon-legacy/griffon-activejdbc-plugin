@@ -19,12 +19,16 @@
  
 import org.javalite.instrumentation.Instrumentation
 
+activejdbcInstrumentSpyFile = new File("${projectWorkDir}/.activejdbc_instrument")
+
 target(activejdbcInstrument: "Instrument source code with Activejdbc") {
+    if (activejdbcInstrumentSpyFile.exists()) return
     Instrumentation instrumentation = new Instrumentation()
     instrumentation.outputDirectory = projectMainClassesDir
     addUrlIfNotPresent rootLoader, projectMainClassesDir
     addUrlIfNotPresent Instrumentation.class.classLoader, projectMainClassesDir
     instrumentation.instrument()
+    activejdbcInstrumentSpyFile.text = new Date().toString()
 }
 
 setDefaultTarget(activejdbcInstrument)

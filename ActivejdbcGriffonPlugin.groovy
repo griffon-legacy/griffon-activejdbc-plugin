@@ -18,7 +18,7 @@
  */
 class ActivejdbcGriffonPlugin {
     // the plugin version
-    String version = '1.0.1'
+    String version = '1.0.2'
     // the version or versions of Griffon the plugin is designed for
     String griffonVersion = '1.2.0 > *'
     // the other plugins this plugin depends on
@@ -136,12 +136,9 @@ Scripts
  * **activejdbc-instrument** - collects information of model classes and
    enhances their bytecode with ActiveJdbc specific calls.
 
-This script must be called explicitly before running the application **at least
-once**. If any of the model classes are updated then you must clean compiled
-sources and call this script again.
-
-**Don't forget to instrument the code, otherwise the model classes will not be
-picked up by ActiveJdbc.**
+This script will be called automatically after sources have been compiled. If
+any of the model classes are updated or new model classes are added then you
+must clean all compiled sources.
 
 Testing
 -------
