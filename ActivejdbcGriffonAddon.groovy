@@ -20,12 +20,16 @@ import griffon.plugins.activejdbc.ActivejdbcConnector
 import griffon.plugins.activejdbc.ActivejdbcEnhancer
 import griffon.plugins.activejdbc.ActivejdbcContributionHandler
 
+import static griffon.util.ConfigUtils.getConfigValueAsBoolean
+
 /**
  * @author Andres Almiray
  */
 class ActivejdbcGriffonAddon {
     void addonPostInit(GriffonApplication app) {
-        ActivejdbcConnector.instance.connect(app)
+        if (getConfigValueAsBoolean(app.config, 'griffon.activejdbc.connect.onstartup', true)) {
+            ActivejdbcConnector.instance.connect(app)
+        }
         def types = app.config.griffon?.activejdbc?.injectInto ?: ['controller']
         for(String type : types) {
             for(GriffonClass gc : app.artifactManager.getClassesOfType(type)) {

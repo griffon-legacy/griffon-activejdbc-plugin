@@ -7,7 +7,7 @@
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by getApplication()licable law or agreed to in writing, software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -18,11 +18,11 @@
  */
 class ActivejdbcGriffonPlugin {
     // the plugin version
-    String version = '1.0.2'
+    String version = '1.1.0'
     // the version or versions of Griffon the plugin is designed for
     String griffonVersion = '1.2.0 > *'
     // the other plugins this plugin depends on
-    Map dependsOn = [datasource: '1.1.0']
+    Map dependsOn = [datasource: '1.2.0']
     // resources that are included in plugin packaging
     List pluginIncludes = []
     // the plugin license
@@ -63,7 +63,7 @@ Upon installation the plugin will generate the following artifacts in `$appdir/g
 
 A new dynamic method named `withActivejdbc` will be injected into all controllers,
 giving you access to a `org.javalite.activejdbc.Base` object, with which you'll
-be able to make calls to the repository. Remember to make all repository calls
+be able to make calls to the database. Remember to make all database calls
 off the UI thread otherwise your application may appear unresponsive when doing
 long computations inside the UI thread.
 
@@ -125,6 +125,14 @@ The following events will be triggered by this addon
    disconnecting from the database
 
 This plugin relies on the facilities exposed by the [datasource][2] plugin.
+
+### Connect at Startup
+
+The plugin will attempt a connection to the default database at startup. If this
+behavior is not desired then specify the following configuration flag in
+`Config.groovy`
+
+    griffon.activejdbc.connect.onstartup = false
 
 ### Example
 

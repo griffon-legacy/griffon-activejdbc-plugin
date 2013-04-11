@@ -30,7 +30,7 @@ final class ActivejdbcEnhancer {
     private ActivejdbcEnhancer() {}
     
     static void enhance(MetaClass mc, ActivejdbcProvider provider = DefaultActivejdbcProvider.instance) {
-        if(LOG.debugEnabled) LOG.debug("Enhancing $mc with $provider")
+        if (LOG.debugEnabled) LOG.debug("Enhancing $mc with $provider")
         mc.withActivejdbc = {Closure closure ->
             provider.withActivejdbc(DEFAULT, closure)
         }
