@@ -27,9 +27,6 @@ import static griffon.util.ConfigUtils.getConfigValueAsBoolean
  */
 class ActivejdbcGriffonAddon {
     void addonPostInit(GriffonApplication app) {
-        if (getConfigValueAsBoolean(app.config, 'griffon.activejdbc.connect.onstartup', true)) {
-            ActivejdbcConnector.instance.connect(app)
-        }
         def types = app.config.griffon?.activejdbc?.injectInto ?: ['controller']
         for(String type : types) {
             for(GriffonClass gc : app.artifactManager.getClassesOfType(type)) {
@@ -40,6 +37,11 @@ class ActivejdbcGriffonAddon {
     }
 
     Map events = [
+        LoadAddonsEnd: { app, addons ->
+            if (getConfigValueAsBoolean(app.config, 'griffon.activejdbc.connect.onstartup', true)) {
+                ActivejdbcConnector.instance.connect(app)
+            }
+        },
         ShutdownStart: { app ->
             ActivejdbcConnector.instance.disconnect(app)
         }

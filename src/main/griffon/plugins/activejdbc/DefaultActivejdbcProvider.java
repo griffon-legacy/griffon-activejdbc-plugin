@@ -29,4 +29,6 @@ public class DefaultActivejdbcProvider extends AbstractActivejdbcProvider {
     public static DefaultActivejdbcProvider getInstance() {
         return INSTANCE;
     }
+
+    private DefaultActivejdbcProvider() {}
 }
